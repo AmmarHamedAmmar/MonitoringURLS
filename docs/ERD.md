@@ -17,11 +17,26 @@ We'll need at least the following entities to implement the service:
 | ID     | STRING /UUID |
 | First/Last Name | STRING |
 | Passwords | STRING | 
-|E-mail | STRING |
-|UserName | STRING |   
+| E-mail | STRING |
+| UserName | STRING |   
 
+**Checks** 
+| Column | Type | 
+|--------|------|
+| ID     | STRING/ UUID | 
+| URL    | STRING |
 
-**URLs** 
+**Path** 
+|Column | Type | 
+|-------|------|
+| ID     | STRING/ UUID | 
+| Path   | STRING/ UUID |
+| URLID  | STRING/ UUID |
+
+### note : 
+    this table has one to many relationship with Checks table (Every URL may have differtent pathes)
+
+**Reports** 
 | Column | Type  | 
 |--------|-------|
 | ID     | STRING /UUID |
@@ -40,7 +55,7 @@ We'll need at least the following entities to implement the service:
 | CheckTime | NUMBER | 
 
 ### note  : 
-    this table has one to one relationship with URLs table 
+    this table has one to one relationship with Checks table (Every URL should be checked every (5 min ) for example)
 
 **RequestsLogs** 
 
@@ -56,7 +71,7 @@ We'll need at least the following entities to implement the service:
     every time the status code changes for specific URL we store this logs here by date 
 
 ### note 2 : 
-    this table has one to many relationship with URLs table 
+    this table has one to many relationship with Checks table (every URL may have success log and failure logs )
 
 
 **UserURLs** 
@@ -67,8 +82,8 @@ We'll need at least the following entities to implement the service:
 | URLID | STRING/UUID | 
 
 ### note : 
-    this table has one to many relationship with Users table ,
-    and one to one relationship with URLs table 
+    this table has one to many relationship with Users table (every user may have more than one URL to check on ) ,
+    and one to one relationship with Checks table (every URL should be listed in one user bucket )
 
 
 **URLsTags** 
@@ -78,9 +93,43 @@ We'll need at least the following entities to implement the service:
 | URLTage | STRING | 
 
 ### note : 
-    this table has one to many relationship with URLs table 
+    this table has one to many relationship with Checks table (every Tag may have different URLs listed beyond ) 
 
+# Server : 
+A simple HTTP server is responsible for authentication, serving stored data, and potentially ingesting and serving analytics data.
 
+- Node.js is selected for implementing the server . 
+- Express.js is the web server framework.
 
+# Auth : 
+for v1 , a simple JWT-based auth mechanism is to be used , with passwords encrypted and stored in the database. OAuth is to be added initially or later for Google + Facebook . 
 
+# API : 
+
+ **Auth** :
+ ``` 
+/signIn      [POST] 
+/signUp      [POST]
+/signOut     [POST]
+```
+
+**reports** 
+```
+/reports/list           [GET]
+/reports/ :tag          [GET] 
+/reports/ :url          [GET]
+```
+**Tags** 
+```
+tag/:url       [POST]
+
+```
+**checks** 
+```
+/check/:url/:path   [PUT]
+/checks             [GET]
+/check/:url         [GET]
+/check/:url/:path   [DELETE]
+/check/:url         [DELETE]
+```
 
