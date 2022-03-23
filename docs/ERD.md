@@ -121,7 +121,7 @@ for v1 , a simple JWT-based auth mechanism is to be used , with passwords encryp
 ```
 **Tags** 
 ```
-tag/:url       [POST]
+tag/:url/:tag       [POST]
 
 ```
 **checks** 

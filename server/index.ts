@@ -1,12 +1,11 @@
-// here we start monitoring app which track the performance of given urls by the user 
-// we have to make authentication 
 
-
+import {getChecks , getCheckByURL} from './Handler/checkHandler'
 import express , {RequestHandler} from 'express' 
-const app = express() 
+import { getReports } from './Handler/reportHandler'
 
-// as in express they cant read json body ,,, if you run the following requests without this line ,
-// and try to print && the body in json ->  express will return undefined ...  
+
+const app = express() 
+ 
 app.use(express.json())
 
 const requestLoggerMiddleWare: RequestHandler = (req , res , next)=> {
@@ -24,12 +23,11 @@ app.use((req , res , next)=>{
 
 
 const posts :  any[] = []
-app.get('/'  ,  (req , res) => {
-    res.send("iam running as purppose ")
-})
+app.get('/check'  , getChecks)
+app.get('/check/url'  , getCheckByURL)
+app.get('/reports/list'  , getReports)
 
-app.post('/posts'  ,   (req , res ) => {
-    res.send(req.body)
-})
+
+
 
 app.listen(8080)
