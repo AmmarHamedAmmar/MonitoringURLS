@@ -11,7 +11,7 @@ import { Checks } from "../types";
 
 export interface CheckDao { 
 
-    createCheck(url : string ) : void 
+    createCheck(check : Checks ) : void 
     getAllChecks () : Checks[]
     getCheckByURL(url : string) : Checks[] | undefined
     deletePath(url :string , path : string ) : void | undefined
@@ -27,6 +27,5 @@ export interface CheckDao {
 export interface TagDao{
 
     creaeteTag(tag : string , url : string  ) :  void | undefined 
-    // if the url posted is not existed  
 }
 

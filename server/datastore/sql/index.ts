@@ -5,7 +5,7 @@ import { datastore } from "../datastoreInterface";
 export class models implements datastore {
 
     
-    createCheck(check: string): void {
+    createCheck(check: Checks): void {
         throw new Error("Method not implemented.");
     }
     getAllChecks(): Checks[] {

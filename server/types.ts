@@ -1,3 +1,4 @@
+import { RequestHandler } from "express"
 
 
 export interface User {
@@ -64,3 +65,10 @@ export interface URLsTags {
     urltag: string
     
 }
+
+export type  typeValidation<req , res>  = RequestHandler<
+any,
+Partial<res> , 
+Partial<req> , 
+any
+> 
