@@ -1,10 +1,26 @@
 import { Checks, Reports, User } from "../../types";
 import { datastore } from "../datastoreInterface";
+import { Database, open as sqliteOpen } from 'sqlite';
+import sqlite3 from 'sqlite3';
+import path from 'path';
 
 
 export class models implements datastore {
 
-    
+    public async openDb () {
+        // syntax only available for v. ^4.0.23
+        const db = await sqliteOpen({
+            filename: path.join(__dirname, 'datafile.sqlite'),
+            driver: sqlite3.Database, 
+          });
+
+          await db.migrate({
+              migrationsPath : path.join(__dirname, 'migrations')
+          })
+        return this ; 
+      }
+
+
     createCheck(check: Checks): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -45,3 +61,4 @@ export class models implements datastore {
     }
 
 }
+

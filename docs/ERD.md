@@ -6,7 +6,7 @@ This document explores the design of Monitoring ULRS, a social experience for tr
 We'll use a basic client/server architecture, where a single server is deployed on a cloud provider next to a relational database, and serving HTTP traffic from a public endpoint.
 
 # Storage : 
-We'll use a relational database (schema follows) to fast retrieval of the URL reports . A minimal database implementation such as sqlite3 suffices, although we can potentially switch to something with a little more power such as PostgreSql if necessary. Data will be stored on the server on a separate, backed up volume for resilience. There will be no replication or sharding of data at this early stage.
+We'll use a relational database (schema follows) to fast retrieval of the URL reports . A minimal database implementation such as sqlite3 suffices, although we can potentially switch to something with a little more power such as PostgreSql if necessary. Data will be stored on the server on a separate, backed up volume for resilience. There will be no replication or sharding of data at this early stage. we will use a package containing 2 versions: sqlite3 which is DB driver and sqlite which gives some exxternal features like : DB migrations 
 
 # Schema : 
 We'll need at least the following entities to implement the service:

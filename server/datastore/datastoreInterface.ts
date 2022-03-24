@@ -6,10 +6,13 @@ import { UserDao } from './dao/UserDao';
 
 
 export interface datastore extends CheckDao , ReportDao , UserDao , TagDao  {
+  
+} 
 
 
+export  let db : datastore ; 
+export  const  initDB  = async ()=> {
+    db = await  new models().openDb() 
 }
-
-export const db  = new models()
 
 
