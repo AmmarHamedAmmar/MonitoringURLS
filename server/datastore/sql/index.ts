@@ -5,43 +5,43 @@ import { datastore } from "../datastoreInterface";
 export class models implements datastore {
 
     
-    createCheck(check: Checks): void {
+    createCheck(check: Checks): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    getAllChecks(): Checks[] {
-        return [];
+    getAllChecks(): Promise<Checks[]> {
+        throw new Error("Method not implemented.");
     }
-    getCheckByURL(url: string): Checks[] {
+    getCheckByURL(url: string): Promise<Checks[]> {
         console.log("url is the following  : " , url)
-        return [] 
-    }
-    deletePath(url: string, path: string): void {
         throw new Error("Method not implemented.");
     }
-    deleteCheck(url: string): void {
+    deletePath(url: string, path: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    getReports(): Reports[]  {
+    deleteCheck(url: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    getReports(): Promise<Reports[]>  {
 
-       return [] ; 
-    }
-    getReportsByTag(tag: string): Reports[] {
         throw new Error("Method not implemented.");
     }
-    getReportByURL(url: string): Reports[] {
+    getReportsByTag(tag: string): Promise<Reports[]> {
         throw new Error("Method not implemented.");
     }
-    createUser(User: User): void {
+    getReportByURL(url: string): Promise<Reports[]> {
         throw new Error("Method not implemented.");
     }
-    getUserByEmail(email: string, password: string): User {
+    createUser(User: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    getUserByUsername(username: string, password: string): User {
+    getUserByEmail(email: string, password: string): Promise <User> {
         throw new Error("Method not implemented.");
     }
-    creaeteTag(tag: string, url: string): void {
+    getUserByUsername(username: string, password: string): Promise<User> {
         throw new Error("Method not implemented.");
+    }
+    creaeteTag(tag: string, url: string): Promise<void> {
+        return Promise.resolve()
     }
 
 }

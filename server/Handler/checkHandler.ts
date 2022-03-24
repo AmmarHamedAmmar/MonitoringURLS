@@ -3,32 +3,31 @@ import { Checks, Path, typeValidation } from "../types";
 import {db} from '../datastore/datastoreInterface'
 import crypto from 'crypto'
 
-
-export const getChecks : typeValidation<{},{checks : Checks []}> = (req , res)=> {
+export const getChecks : typeValidation<{},{checks : Checks []}> = async (req , res)=> {
 
     
     // TODO : validate user
     // TODO : userID is going to be taken from the session
-    res.send({checks : db.getAllChecks()})
+    res.send({checks : await db.getAllChecks()})
 }
 
 
 type urlType = Pick<Checks , 'url'>
-export const getCheckByURL : typeValidation<urlType,{checks : Checks []}> = (req , res)=> {
+export const getCheckByURL : typeValidation<urlType,{checks : Checks []}> = async (req , res)=> {
     
     if(!req.body.url) return res.sendStatus(400)
 
     // TODO : validate user , url exsisting 
     // TODO : userID is going to be taken from the session
     const url = req.body.url
-    res.send({checks : db.getCheckByURL(url)})
+    res.send({checks : await  db.getCheckByURL(url)})
     
 }
 
 // here i want the req be in type Checks , and  having url object  
 type checkRequest = Pick<Checks , 'url'>
 
-export const createCheck : typeValidation<checkRequest , {}> = (req , res)=> {
+export const createCheck : typeValidation<checkRequest , {}> = async (req , res)=> {
 
     if(!req.body.url) return res.sendStatus(400)
 
@@ -41,13 +40,17 @@ export const createCheck : typeValidation<checkRequest , {}> = (req , res)=> {
         'id' : crypto.randomUUID()
     }
 
-    db.createCheck(check)
+    /* QUESTION   , if you remove the await , db.createCheck() still going to work , so why we await ???
+        THE ASNWER : we await to make sure the database func is successfully created the check ,, if she failed , createCheck() func will fail as well .
+                    IN case that we remove await , maybe db.createCheck() fail and then creatCkeck() will not fail ,  then this is a problem ..
+     */ 
+    await db.createCheck(check)
     res.sendStatus(201)
 
 }
 
 
-export const deleteCheck : typeValidation<checkRequest , {}> = (req , res)=> {
+export const deleteCheck : typeValidation<checkRequest , {}> =async  (req , res)=> {
     
     if(!req.body.url) return res.sendStatus(400)
     const url : string  = req.body.url ; 
@@ -55,14 +58,14 @@ export const deleteCheck : typeValidation<checkRequest , {}> = (req , res)=> {
     
     // TODO : validate user , url exsisting 
     // TODO : userID is going to be taken from the session
-    db.deleteCheck(url)
+    await db.deleteCheck(url)
     res.sendStatus(200)
 }
 
 
 
 type requestType = Pick<Path, 'path' | 'urlid'>
-export const deleteCheckPath : typeValidation<requestType , {}> = (req , res)=> {
+export const deleteCheckPath : typeValidation<requestType , {}> = async (req , res)=> {
     
     if(!req.body.urlid || !req.body.path) return res.sendStatus(400)
     const url : string  = req.body.urlid ; 
@@ -72,6 +75,6 @@ export const deleteCheckPath : typeValidation<requestType , {}> = (req , res)=> 
     // TODO : validate user , url exsisting 
     // TODO : userID is going to be taken from the session
     
-    db.deletePath(url , path )
+    await db.deletePath(url , path )
     res.sendStatus(200)
 }

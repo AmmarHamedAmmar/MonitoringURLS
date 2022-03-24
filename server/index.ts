@@ -2,6 +2,8 @@
 import {getChecks , getCheckByURL} from './Handler/checkHandler'
 import express , {RequestHandler} from 'express' 
 import { getReports } from './Handler/reportHandler'
+import asyncHandler from "express-async-handler"
+
 
 
 const app = express() 
@@ -23,9 +25,9 @@ app.use((req , res , next)=>{
 
 
 const posts :  any[] = []
-app.get('/check'  , getChecks)
-app.get('/check/url'  , getCheckByURL)
-app.get('/reports/list'  , getReports)
+app.get('/check'  , asyncHandler(getChecks) )
+app.get('/check/url'  , asyncHandler(getCheckByURL))
+app.get('/reports/list'  , asyncHandler(getReports) )
 
 
 
