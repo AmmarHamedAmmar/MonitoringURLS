@@ -6,7 +6,8 @@ import path from 'path';
 
 
 export class models implements datastore {
-
+    private db! : Database<sqlite3.Database, sqlite3.Statement> ;
+  
     public async openDb () {
         // syntax only available for v. ^4.0.23
         const db = await sqliteOpen({
