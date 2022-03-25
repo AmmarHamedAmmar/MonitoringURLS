@@ -49,12 +49,12 @@ export class models implements datastore {
         throw new Error("Method not implemented.");
     }
     createUser(User: User): Promise<void> {
+        return Promise.resolve()
+    }
+    getUserByEmail(email: string, password: string): Promise <User>{
         throw new Error("Method not implemented.");
     }
-    getUserByEmail(email: string, password: string): Promise <User> {
-        throw new Error("Method not implemented.");
-    }
-    getUserByUsername(username: string, password: string): Promise<User> {
+    getUserByUsername(username: string, password: string): Promise<User>  {
         throw new Error("Method not implemented.");
     }
     creaeteTag(tag: string, url: string): Promise<void> {

@@ -13,7 +13,7 @@ import { User } from "../../types";
 export interface UserDao { 
 
     createUser(User : User) : Promise<void> 
-    getUserByEmail(email : string , password : string ) : Promise<User>
+    getUserByEmail(email : string , password : string ) : Promise<User> 
     getUserByUsername(username :string , password : string ) : Promise<User> 
 }
 
