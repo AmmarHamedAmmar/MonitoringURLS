@@ -33,7 +33,7 @@ export const signUp :typeValidation<userSignUpRequest,SignUpResponse > = async (
         lastName : user.lastName!,
         email : user.email!,
         userName : user.userName!,
-        password : ((user.password)!)
+        password : hashPassword((user.password)!)
     };
     const jwt = signJwt({ userId: USER.id });
     emailVarification(user.email! , jwt)
@@ -51,7 +51,7 @@ export const signIn : typeValidation<userLogin ,userLoginResponse> = async (req 
     if(!validateLogin) {
         return res.status(422).send({message : unprocessableEntityResponse() }  )
     }
-    const exist  = await db.getUser(user.userName! , user.password!)
+    const exist  = await db.getUser(user.userName! , hashPassword(user.password!))
     if(!exist){
         /** first status code : 406 : 
         *       This response is sent when the web server, after performing server-driven content negotiation,
@@ -142,7 +142,7 @@ export const signUpvarification : typeValidation<JwtObject , {}> =async (req , r
 }
 function hashPassword(password: string): string {
     if(password) console.log("pass : " , password )
-    return crypto.pbkdf2Sync(password, process.env.PASSWORD_SALT!, 42, 64, 'sha512').toString('hex');
+    return crypto.pbkdf2Sync(password, process.env.MY_SECRET_SALT!, 42, 64, 'sha512').toString('hex');
 }
 
 
