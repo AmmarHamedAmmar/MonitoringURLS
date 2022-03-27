@@ -8,7 +8,6 @@ import { errHandler } from './middleware/errorMiddleware';
 import { signIn, signUp, signUpvarification } from './Handler/authHandler'
 import { requestLoggerMiddleWare } from './middleware/loggerMiddleWare'
 import dotenv from  'dotenv' ; 
-import nodemailer from 'nodemailer'
 import { authMiddleware } from './middleware/authMiddleware'
 
 // make the whole file async in this async func 

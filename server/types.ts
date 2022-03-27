@@ -67,9 +67,9 @@ export interface UserURLs {
 }
 
 export interface URLsTags {
+    id : string 
     urlid : string
     urltag: string
-    
 }
 
 export type  typeValidation<req , res>  = RequestHandler<

@@ -1,4 +1,4 @@
-import { Checks, Reports, User, Uservarification } from "../../types";
+import { Checks, Reports, URLsTags, User, Uservarification } from "../../types";
 import { datastore } from "../datastoreInterface";
 import { Database, open as sqliteOpen } from 'sqlite';
 import sqlite3 from 'sqlite3';
@@ -29,33 +29,36 @@ export class models implements datastore {
     }
 
 
-    createCheck(check: Checks): Promise<void> {
-        throw new Error("Method not implemented.");
+    async createCheck(check: Checks): Promise<void> {
+        await this.db.run(
+            'INSERT INTO users (id, url) VALUES (?,?)',
+            check.id , 
+            check.url
+          );
     }
-    getAllChecks(): Promise<Checks[]> {
-        throw new Error("Method not implemented.");
+    getAllChecks(): Promise<Checks[] | undefined> {
+        return this.db.get(`SELECT * FROM Checks`); 
 
     }
-    getCheckByURL(url: string): Promise<Checks[]> {
-        console.log("url is the following  : " , url)
-        throw new Error("Method not implemented.");
+    getCheckByURL(url: string): Promise<Checks[]| undefined > {
+        return this.db.get(`SELECT * FROM Checks WHERE url = ?` , url ); 
     }
     deletePath(url: string, path: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
     deleteCheck(url: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        return this.db.get(`DELETE * FROM Checks WHERE url = ?` , url ); 
+
     }
     getReports(): Promise<Reports[]>  {
 
-        return this.db.all('SELECT * FROM reports') ;
+        return this.db.all('SELECT * FROM Reports') ;
     }
-    getReportsByTag(tag: string): Promise<Reports[]> {
-        throw new Error("Method not implemented.");
+
+    getReportByURL(url: string): Promise<Reports[] | undefined > {
+        return this.db.get(`SELECT * FROM Reports WHERE url = ?` , url ); 
     }
-    getReportByURL(url: string): Promise<Reports[]> {
-        throw new Error("Method not implemented.");
-    }
+
     async createUser(user: User): Promise<void> {
         await this.db.run(
             'INSERT INTO users (id, email, password, firstName, lastName, userName) VALUES (?,?,?,?,?,?)',
@@ -79,8 +82,13 @@ export class models implements datastore {
         return this.db.get<User>(`SELECT * FROM users WHERE userName = ? AND  password = ?`,username ,  password); 
     }
 
-    creaeteTag(tag: string, url: string): Promise<void> {
-        return Promise.resolve()
+    async creaeteTag(URLTag : URLsTags): Promise<void> {
+        await this.db.run(
+            'INSERT INTO URLsTags (id, urlid, urltag) VALUES (?,?,?)',
+            URLTag.id , 
+            URLTag.urlid , 
+            URLTag.urltag
+          );
     }
 
     getUserVarification(userId: string) : Promise<Uservarification | undefined> {
