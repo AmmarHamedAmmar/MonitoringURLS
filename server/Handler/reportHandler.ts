@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import {models} from '../datastore/sql/index'
+import {models} from '../datastore/sql/Databse'
 import { Checks, Reports, typeValidation, URLsTags } from "../types";
 import {db} from '../datastore/datastoreInterface'
 

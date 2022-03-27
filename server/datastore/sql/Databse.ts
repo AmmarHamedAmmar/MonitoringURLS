@@ -6,20 +6,26 @@ import path from 'path';
 
 
 export class models implements datastore {
+
+
     private db! : Database<sqlite3.Database, sqlite3.Statement> ;
-  
+
     public async openDb () {
         // syntax only available for v. ^4.0.23
-        const db = await sqliteOpen({
+        this.db = await sqliteOpen({
+        
             filename: path.join(__dirname, 'datafile.sqlite'),
             driver: sqlite3.Database, 
           });
-
-          await db.migrate({
+          this.db.run('PRAGMA foreign_keys = ON;');
+          await this.db.migrate({
               migrationsPath : path.join(__dirname, 'migrations')
           })
+          console.log("this is the db " , this.db)
+   
+
         return this ; 
-      }
+    }
 
 
     createCheck(check: Checks): Promise<void> {
@@ -40,7 +46,7 @@ export class models implements datastore {
     }
     getReports(): Promise<Reports[]>  {
 
-        throw new Error("Method not implemented.");
+        return this.db.all('SELECT * FROM reports') ;
     }
     getReportsByTag(tag: string): Promise<Reports[]> {
         throw new Error("Method not implemented.");
@@ -48,15 +54,29 @@ export class models implements datastore {
     getReportByURL(url: string): Promise<Reports[]> {
         throw new Error("Method not implemented.");
     }
-    createUser(User: User): Promise<void> {
-        return Promise.resolve()
+    async createUser(user: User): Promise<void> {
+        await this.db.run(
+            'INSERT INTO users (id, email, password, firstName, lastName, userName) VALUES (?,?,?,?,?,?)',
+            user.id,
+            user.email,
+            user.password,
+            user.firstName,
+            user.lastName,
+            user.userName
+          );
+        
     }
-    getUserByEmail(email: string, password: string): Promise <User>{
-        throw new Error("Method not implemented.");
+    getUserByEmail(email: string): Promise <User | undefined>{
+        return this.db.get<User>(`SELECT * FROM users WHERE email = ?`, email); 
+        
     }
-    getUserByUsername(username: string, password: string): Promise<User>  {
-        throw new Error("Method not implemented.");
+    getUserByUsername(userName: string): Promise<User | undefined >  {
+        return this.db.get<User>(`SELECT * FROM users WHERE userName = ?`, userName); 
     }
+    getUser(username : string , password : string) : Promise<User | undefined> { 
+        return this.db.get<User>(`SELECT * FROM users WHERE userName = ? AND  password = ?`,username ,  password); 
+    }
+
     creaeteTag(tag: string, url: string): Promise<void> {
         return Promise.resolve()
     }

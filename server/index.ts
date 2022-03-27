@@ -5,22 +5,19 @@ import { getReports } from './Handler/reportHandler'
 import asyncHandler from "express-async-handler"
 import {db, initDB} from './datastore/datastoreInterface'
 import { errHandler } from './middleware/errorMiddleware';
-import { signUp } from './Handler/userHandler'
-
+import { signIn, signUp } from './Handler/authHandler'
+import { requestLoggerMiddleWare } from './middleware/loggerMiddleWare'
+import dotenv from  'dotenv' ; 
 // make the whole file async in this async func 
 (async ()=> {
     
     await initDB()
+    dotenv.config()
     const app = express() 
     
     app.use(express.json())
 
-    const requestLoggerMiddleWare: RequestHandler = (req , res , next)=> {
 
-        console.log(req.path , " - req body : " , req.body) ; 
-        next() ; 
-
-    }
     app.use(requestLoggerMiddleWare)
 
     app.use((req , res , next)=>{
@@ -31,6 +28,7 @@ import { signUp } from './Handler/userHandler'
 
     const posts :  any[] = []
     app.post('/v1/signUp'  , asyncHandler(signUp) )
+    app.post('/v1/signIn'  , asyncHandler(signIn) )
     app.get('/v1/check'  , asyncHandler(getChecks) )
     app.get('/v1/check/url'  , asyncHandler(getCheckByURL))
     app.get('/v1/reports/list'  , asyncHandler(getReports) )

@@ -3,10 +3,10 @@ import { RequestHandler } from "express"
 
 export interface User {
     id : string   
-    firstname : string 
-    lastname : string 
+    firstName : string 
+    lastName : string 
     email : string  
-    username  :string 
+    userName  :string 
     password : string 
 }
 
@@ -72,3 +72,7 @@ Partial<res> ,
 Partial<req> , 
 any
 > 
+
+export interface JwtObject {
+    userId: string;
+}

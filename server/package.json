@@ -4,7 +4,7 @@
   "description": "Build an uptime monitoring RESTful API server that allows authenticated users to monitor URLs, and get detailed uptime reports about their availability, average response time, and total uptime/downtime.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watchAll",
     "start": "nodemon index.ts"
   },
   "repository": {
@@ -18,17 +18,25 @@
   },
   "homepage": "https://github.com/3mmar7amed/MonitoringURLS#readme",
   "dependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.15",
     "sqlite": "^4.0.25",
     "sqlite3": "^5.0.2",
+    "ts-jest": "^27.1.4",
     "typescript": "^4.6.2"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "@types/jest": "^27.4.1",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/sqlite3": "^3.1.8",
-    "prettier": "^2.6.0"
+    "jest": "^27.5.1",
+    "prettier": "^2.6.0",
+    "supertest": "^6.2.2"
   }
 }
