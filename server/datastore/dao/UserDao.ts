@@ -18,5 +18,6 @@ export interface UserDao {
     getUser(username : string  , password : string) : Promise<User | undefined>
     getUserVarification(userId: string) : Promise<Uservarification | undefined>
     varifyUser(user :Uservarification ) : Promise<void> 
+    getUserById(userId: string) : Promise<User | undefined>
 }
 

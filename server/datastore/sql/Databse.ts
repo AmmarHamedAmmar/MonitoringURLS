@@ -3,6 +3,7 @@ import { datastore } from "../datastoreInterface";
 import { Database, open as sqliteOpen } from 'sqlite';
 import sqlite3 from 'sqlite3';
 import path from 'path';
+import { check } from "prettier";
 
 
 export class models implements datastore {
@@ -33,6 +34,7 @@ export class models implements datastore {
     }
     getAllChecks(): Promise<Checks[]> {
         throw new Error("Method not implemented.");
+
     }
     getCheckByURL(url: string): Promise<Checks[]> {
         console.log("url is the following  : " , url)
@@ -84,7 +86,7 @@ export class models implements datastore {
     getUserVarification(userId: string) : Promise<Uservarification | undefined> {
         return this.db.get<Uservarification>(`SELECT * FROM UserVarificatoin WHERE userId = ?`,userId); 
     }
-    
+
     async varifyUser(user : Uservarification) : Promise<void> {
         await this.db.run(
             'INSERT INTO UserVarificatoin (id,userId, varified) VALUES (?,?,?)',
@@ -92,6 +94,11 @@ export class models implements datastore {
             user.userId,
             user.varified,
           );
+    }
+
+    getUserById(userId: string) : Promise<User | undefined> {
+        return this.db.get<User>(`SELECT * FROM users WHERE userId = ?`,userId);
+
     }
 
 }

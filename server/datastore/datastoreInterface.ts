@@ -7,6 +7,7 @@ import { UserDao } from './dao/UserDao';
 
 export interface datastore extends CheckDao , ReportDao , UserDao , TagDao  {
     
+    
   
 } 
 

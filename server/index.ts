@@ -9,6 +9,7 @@ import { signIn, signUp, signUpvarification } from './Handler/authHandler'
 import { requestLoggerMiddleWare } from './middleware/loggerMiddleWare'
 import dotenv from  'dotenv' ; 
 import nodemailer from 'nodemailer'
+import { authMiddleware } from './middleware/authMiddleware'
 
 // make the whole file async in this async func 
 (async ()=> {
@@ -28,10 +29,14 @@ import nodemailer from 'nodemailer'
     }) 
     
     
-    const posts :  any[] = []
+    // public endpoints 
     app.post('/v1/signUp'  , asyncHandler(signUp) )
     app.post('/v1/signIn'  , asyncHandler(signIn) )
     app.post('/v1/signUpVarification' , asyncHandler(signUpvarification))
+
+    app.use(authMiddleware)
+
+    //protected endpoints 
     app.get('/v1/check'  , asyncHandler(getChecks) )
     app.get('/v1/check/url'  , asyncHandler(getCheckByURL))
     app.get('/v1/reports/list'  , asyncHandler(getReports) )

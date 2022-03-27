@@ -37,8 +37,7 @@ export const signUp :typeValidation<userSignUpRequest,SignUpResponse > = async (
     };
     const jwt = signJwt({ userId: USER.id });
     emailVarification(user.email! , jwt)
-    //TODO : send him a link with the token in the body  , when you recieve it , just decode it and compare with the actual id 
-    // TODO : make a table that has two props : user id and virified , use then in sign in func 
+
     await db.createUser(USER);
       
     return res.status(201).send({message : 'created successfully' , jwt })
