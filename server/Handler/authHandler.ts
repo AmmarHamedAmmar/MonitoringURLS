@@ -1,8 +1,9 @@
 import { JwtObject, typeValidation, User } from "../types"
 import {db} from '../datastore/datastoreInterface'
 import crypto from 'crypto';
-import { signJwt } from "../auth";
+import { signJwt, verifyJWT } from "../auth";
 import nodemailer from 'nodemailer'
+import jwt from 'jsonwebtoken';
 
 
 export interface SignUpResponse {
@@ -34,10 +35,12 @@ export const signUp :typeValidation<userSignUpRequest,SignUpResponse > = async (
         userName : user.userName!,
         password : ((user.password)!)
     };
-    emailVarification(user.email!)
+    const jwt = signJwt({ userId: USER.id });
+    emailVarification(user.email! , jwt)
+    //TODO : send him a link with the token in the body  , when you recieve it , just decode it and compare with the actual id 
     // TODO : make a table that has two props : user id and virified , use then in sign in func 
       await db.createUser(USER);
-      const jwt = signJwt({ userId: USER.id });
+      
       return res.status(201).send({message : 'created successfully' , jwt })
     
 
@@ -121,7 +124,7 @@ function hashPassword(password: string): string {
 }
 
 
-function emailVarification (mail : string) {
+export async function emailVarification  (email : string , token : string ) {
     let transporter = nodemailer.createTransport({
         service : 'gmail' , 
         auth : {
@@ -134,13 +137,15 @@ function emailVarification (mail : string) {
 
     let mailOptions = {
         from : process.env.AUTH_EMAIL , 
-        to : mail , 
+        to : email , 
         subject : "hi from here" , 
-        text : "hi from ammar " 
+        html :`<h2> please click on the following link to activate your acount</h2>
+                <p>${process.env.CLIENT_URL}/activation/${token}</p> `
     } 
-    transporter.sendMail(mailOptions , function(err , succ) {
-        if(err) console.log("some error happend" , err)
-        if(succ) console.log("email sent : " ,  succ)
-    }) ; 
+     transporter.sendMail(mailOptions , function(err , succ) {
+        if(err) return false 
+    }) ;
+    return true ; 
 }
+
 

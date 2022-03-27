@@ -8,6 +8,8 @@ import { errHandler } from './middleware/errorMiddleware';
 import { signIn, signUp } from './Handler/authHandler'
 import { requestLoggerMiddleWare } from './middleware/loggerMiddleWare'
 import dotenv from  'dotenv' ; 
+import nodemailer from 'nodemailer'
+
 // make the whole file async in this async func 
 (async ()=> {
     
@@ -24,7 +26,7 @@ import dotenv from  'dotenv' ;
         console.log(Date.now())
         next()
     }) 
-
+    
     
     const posts :  any[] = []
     app.post('/v1/signUp'  , asyncHandler(signUp) )
@@ -38,6 +40,7 @@ import dotenv from  'dotenv' ;
     app.listen(8080)
 
 })()
+
 
 
 
