@@ -25,7 +25,7 @@ import dotenv from  'dotenv' ;
         next()
     }) 
 
-
+    
     const posts :  any[] = []
     app.post('/v1/signUp'  , asyncHandler(signUp) )
     app.post('/v1/signIn'  , asyncHandler(signIn) )

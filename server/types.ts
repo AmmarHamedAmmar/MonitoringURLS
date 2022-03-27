@@ -68,11 +68,11 @@ export interface URLsTags {
 
 export type  typeValidation<req , res>  = RequestHandler<
 any,
-Partial<res> , 
+Partial<message<res>> , 
 Partial<req> , 
 any
 > 
-
+export type message<T> = T & {message : string }
 export interface JwtObject {
     userId: string;
 }

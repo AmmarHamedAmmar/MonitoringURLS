@@ -1,21 +1,28 @@
-import { typeValidation, User } from "../types"
+import { JwtObject, typeValidation, User } from "../types"
 import {db} from '../datastore/datastoreInterface'
 import crypto from 'crypto';
+import { signJwt } from "../auth";
+import nodemailer from 'nodemailer'
 
 
+export interface SignUpResponse {
+    jwt: string;
+  }
 type userSignUpRequest = Pick<User , 'firstName' | 'lastName' | 'password' | 'email' |'userName'>
 type userLogin = Pick<User , 'userName' | 'password'>
-type userLoginResponse = Pick<User , 'email' | 'firstName' | 'lastName' | 'userName' >
-export const signUp :typeValidation<userSignUpRequest,{} > = async (req , res)=> {
+export interface userLoginResponse {
+    user : Pick<User , 'email' | 'firstName' | 'lastName' | 'userName' > , 
+    jwt : string
+}
+export const signUp :typeValidation<userSignUpRequest,SignUpResponse > = async (req , res)=> {
     const user = req.body
 
     if(!validateUser(req.body)){
-        return res.status(422).send(unprocessableEntityResponse)
+        return res.status(422).send({message : unprocessableEntityResponse()})
         
     }
     if(await userAlreadyExists(user)) {
-        return res.status(200).send('user aleady exists ')
-        // redirect him to the loging page 
+        return res.status(200).send({message : 'user aleady exists '})
 
     }
 
@@ -27,38 +34,42 @@ export const signUp :typeValidation<userSignUpRequest,{} > = async (req , res)=>
         userName : user.userName!,
         password : ((user.password)!)
     };
+    emailVarification(user.email!)
+    // TODO : make a table that has two props : user id and virified , use then in sign in func 
       await db.createUser(USER);
-      return res.sendStatus(201).send('created successfully')
+      const jwt = signJwt({ userId: USER.id });
+      return res.status(201).send({message : 'created successfully' , jwt })
     
 
 }
 
-export const signIn : typeValidation<userLogin ,{}> = async (req , res)=> {
+export const signIn : typeValidation<userLogin ,userLoginResponse> = async (req , res)=> {
     const user  =req.body
     console.log("user is  : " , user )
     if(!validateLogin) {
-        return res.status(422).send(unprocessableEntityResponse)
+        return res.status(422).send({message : unprocessableEntityResponse() }  )
     }
     const exist  = await db.getUser(user.userName! , user.password!)
     if(!exist){
-
-
         /** first status code : 406 : 
         *       This response is sent when the web server, after performing server-driven content negotiation,
                 doesn't find any content that conforms to the criteria given by the user agent.
 
             Second Status code : 403 which is unauthorized 
          */
-        return res.status(403).send('user doesnot exist ')
+        return res.status(403).send({message : 'user doesnot exist '})
     }
+
+    const jwt = signJwt({ userId: exist.id });
     const response : userLoginResponse = {
-        email : exist.email , 
-        lastName : exist.firstName , 
-        firstName : exist.lastName , 
-        userName : exist.userName
+        user: {
+            email: exist.email,
+            firstName: exist.firstName,
+            lastName: exist.lastName,
+            userName: exist.userName,
+        } , 
+        jwt,
     }
-        
-     
     return res.status(200).send(response) ; 
 }
 
@@ -91,10 +102,7 @@ function validateLogin(user : userLogin) : boolean {
 
 
 function unprocessableEntityResponse() {
-    return {
-        "message" : "Unprocessable Entity , all fields are required " , 
-        "error"  :"Invalid input"
-    }
+    return "Unprocessable Entity , all fields are required "
 }
 
 async function userAlreadyExists(user : Partial<userSignUpRequest>) {
@@ -110,5 +118,29 @@ async function userAlreadyExists(user : Partial<userSignUpRequest>) {
 function hashPassword(password: string): string {
     if(password) console.log("pass : " , password )
     return crypto.pbkdf2Sync(password, process.env.PASSWORD_SALT!, 42, 64, 'sha512').toString('hex');
+}
+
+
+function emailVarification (mail : string) {
+    let transporter = nodemailer.createTransport({
+        service : 'gmail' , 
+        auth : {
+            user : process.env.AUTH_EMAIL , 
+            pass : process.env.AUTH_PASSWORD
+        }
+    }
+        
+    )
+
+    let mailOptions = {
+        from : process.env.AUTH_EMAIL , 
+        to : mail , 
+        subject : "hi from here" , 
+        text : "hi from ammar " 
+    } 
+    transporter.sendMail(mailOptions , function(err , succ) {
+        if(err) console.log("some error happend" , err)
+        if(succ) console.log("email sent : " ,  succ)
+    }) ; 
 }
 
