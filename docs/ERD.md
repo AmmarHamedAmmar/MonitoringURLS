@@ -34,7 +34,25 @@ We'll need at least the following entities to implement the service:
 |--------|------|
 | ID     | STRING/ UUID | 
 | URL    | STRING |
-| CheckTime | NUMBER | 
+| name    | STRING |
+| protocol    | STRING |
+| path    | STRING |
+| port    | NUMBER |
+| webhook    | STRING |
+| timeout     | NUMBER |
+| interval     | NUMBER |
+|threshold | NUMBER | 
+|httpHeaders | STRING |
+|statusCode | NUMBER |
+|ignoreSSL| STRING |
+
+
+**ChecksAuthentication**
+| Column | Type | 
+|--------|------|
+|username | STRING | 
+|password | STRING | 
+
 
 **Path** 
 |Column | Type | 
