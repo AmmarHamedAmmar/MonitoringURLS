@@ -20,6 +20,7 @@ export interface Uservarification {
 export interface Checks {
     id : string 
     url : string 
+    checkTime : Number
     
 }
 

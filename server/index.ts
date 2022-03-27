@@ -9,7 +9,7 @@ import { signIn, signUp, signUpvarification } from './Handler/authHandler'
 import { requestLoggerMiddleWare } from './middleware/loggerMiddleWare'
 import dotenv from  'dotenv' ; 
 import { authMiddleware } from './middleware/authMiddleware'
-
+import {start} from './Handler/monitoringHandler'
 // make the whole file async in this async func 
 (async ()=> {
     
@@ -19,7 +19,7 @@ import { authMiddleware } from './middleware/authMiddleware'
     
     app.use(express.json())
 
-
+    start()
     app.use(requestLoggerMiddleWare)
 
     app.use((req , res , next)=>{

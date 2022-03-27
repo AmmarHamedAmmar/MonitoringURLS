@@ -31,9 +31,10 @@ export class models implements datastore {
 
     async createCheck(check: Checks): Promise<void> {
         await this.db.run(
-            'INSERT INTO users (id, url) VALUES (?,?)',
+            'INSERT INTO users (id, url , checkTime) VALUES (?,?, ?)',
             check.id , 
-            check.url
+            check.url,
+            check.checkTime
           );
     }
     getAllChecks(): Promise<Checks[] | undefined> {

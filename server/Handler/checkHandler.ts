@@ -19,16 +19,18 @@ export const getCheckByURL : typeValidation<urlType,{checks : Checks []}> = asyn
     
 }
 
-type checkRequest = Pick<Checks , 'url'>
+type checkRequest = Pick<Checks , 'url'|'checkTime'>
 
 export const createCheck : typeValidation<checkRequest , {}> = async (req , res)=> {
 
-    if(!req.body.url) return res.sendStatus(400)
+    if(!req.body.url || ! req.body.checkTime) return res.sendStatus(400)
     
     const url : string  = req.body.url ; 
+    const checkTime : Number = req.body.checkTime
     const check : Checks = {
         'url' : url , 
-        'id' : crypto.randomUUID()
+        'id' : crypto.randomUUID() , 
+        'checkTime' : checkTime
     }
     await db.createCheck(check)
     res.sendStatus(201).send({message : "created"})
