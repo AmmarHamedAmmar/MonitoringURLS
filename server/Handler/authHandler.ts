@@ -1,7 +1,7 @@
-import { JwtObject, typeValidation, User } from "../types"
+import { JwtObject, typeValidation, User, Uservarification } from "../types"
 import {db} from '../datastore/datastoreInterface'
 import crypto from 'crypto';
-import { signJwt, verifyJWT } from "../auth";
+import { signJwt, verifyJwt  } from "../auth";
 import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken';
 
@@ -39,16 +39,16 @@ export const signUp :typeValidation<userSignUpRequest,SignUpResponse > = async (
     emailVarification(user.email! , jwt)
     //TODO : send him a link with the token in the body  , when you recieve it , just decode it and compare with the actual id 
     // TODO : make a table that has two props : user id and virified , use then in sign in func 
-      await db.createUser(USER);
+    await db.createUser(USER);
       
-      return res.status(201).send({message : 'created successfully' , jwt })
+    return res.status(201).send({message : 'created successfully' , jwt })
     
 
 }
 
 export const signIn : typeValidation<userLogin ,userLoginResponse> = async (req , res)=> {
     const user  =req.body
-    console.log("user is  : " , user )
+
     if(!validateLogin) {
         return res.status(422).send({message : unprocessableEntityResponse() }  )
     }
@@ -96,14 +96,23 @@ function validateUser (user : Partial<userSignUpRequest>)  {
     return true ; 
 }
 
-function validateLogin(user : userLogin) : boolean {
-    if(!user.userName || !user.password) {
+async function validateLogin(user : userLogin) : Promise<boolean> {
+    if(!user.userName || !user.password || !await userIsActivated(user)) {
         return false   ; 
     }
     return true  ; 
 }
 
-
+async function userIsActivated (user:userLogin) : Promise<boolean> {
+    const User : User | undefined = await db.getUserByUsername(user.userName)
+    if(User) {
+        const userId : string  = User.id
+        const userVarification  = await db.getUserVarification(userId)
+        if(userVarification?.varified == 1) return true 
+    }   
+    return false 
+}
+ 
 function unprocessableEntityResponse() {
     return "Unprocessable Entity , all fields are required "
 }
@@ -118,6 +127,20 @@ async function userAlreadyExists(user : Partial<userSignUpRequest>) {
     return false  ; 
 }
 
+
+export const signUpvarification : typeValidation<JwtObject , {}> =async (req , res) => {
+    const token  = req.body.userId
+    const userId  = verifyJwt(token!)
+    const USER: Uservarification = {
+        id: crypto.randomUUID(),
+        userId : userId.userId  , 
+        varified : 1 , 
+    };
+    await db.varifyUser(USER)
+    res.status(200).send({message : "varified"}) ; 
+
+
+}
 function hashPassword(password: string): string {
     if(password) console.log("pass : " , password )
     return crypto.pbkdf2Sync(password, process.env.PASSWORD_SALT!, 42, 64, 'sha512').toString('hex');

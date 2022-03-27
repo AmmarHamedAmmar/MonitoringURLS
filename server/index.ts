@@ -5,7 +5,7 @@ import { getReports } from './Handler/reportHandler'
 import asyncHandler from "express-async-handler"
 import {db, initDB} from './datastore/datastoreInterface'
 import { errHandler } from './middleware/errorMiddleware';
-import { signIn, signUp } from './Handler/authHandler'
+import { signIn, signUp, signUpvarification } from './Handler/authHandler'
 import { requestLoggerMiddleWare } from './middleware/loggerMiddleWare'
 import dotenv from  'dotenv' ; 
 import nodemailer from 'nodemailer'
@@ -31,6 +31,7 @@ import nodemailer from 'nodemailer'
     const posts :  any[] = []
     app.post('/v1/signUp'  , asyncHandler(signUp) )
     app.post('/v1/signIn'  , asyncHandler(signIn) )
+    app.post('/v1/signUpVarification' , asyncHandler(signUpvarification))
     app.get('/v1/check'  , asyncHandler(getChecks) )
     app.get('/v1/check/url'  , asyncHandler(getCheckByURL))
     app.get('/v1/reports/list'  , asyncHandler(getReports) )

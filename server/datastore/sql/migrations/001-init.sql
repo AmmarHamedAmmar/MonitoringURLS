@@ -6,3 +6,4 @@ CREATE TABLE users (
   email     VARCHAR UNIQUE NOT NULL,
   password  VARCHAR NOT NULL
 );
+

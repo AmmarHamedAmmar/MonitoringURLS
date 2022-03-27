@@ -10,6 +10,12 @@ export interface User {
     password : string 
 }
 
+export interface Uservarification {
+    id : string , 
+    userId : string , 
+    varified : Number , 
+}
+
 
 export interface Checks {
     id : string 

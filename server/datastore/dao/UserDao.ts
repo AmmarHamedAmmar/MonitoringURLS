@@ -7,7 +7,7 @@
 
 */
 
-import { User } from "../../types";
+import { User, Uservarification } from "../../types";
 
 
 export interface UserDao { 
@@ -16,5 +16,7 @@ export interface UserDao {
     getUserByEmail(email : string  ) : Promise<User | undefined>
     getUserByUsername(username :string   ) : Promise<User | undefined > 
     getUser(username : string  , password : string) : Promise<User | undefined>
+    getUserVarification(userId: string) : Promise<Uservarification | undefined>
+    varifyUser(user :Uservarification ) : Promise<void> 
 }
 

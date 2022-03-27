@@ -15,21 +15,7 @@ export function verifyJwt(token: string): JwtObject {
   return jwt.verify(token, getJwtSecret()) as JwtObject;
 }
 
-export function decodeJWT(token : string){
-    return jwt.verify(token, getJwtSecret() , function(err , decode){
-            if(err) {
-                console.log("something went wrong in decoding the jwt ")
-                return ;
-            }
-            else {
-                // UNCHECKED
-                const user_id  = decode
-                console.log(user_id)
-                return user_id
-            }
-    }) ;
 
-}
 function getJwtSecret(): string {
   const secret = process.env.JWT_SECRET;
   if (!secret) {

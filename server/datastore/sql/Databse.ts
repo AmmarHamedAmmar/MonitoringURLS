@@ -1,4 +1,4 @@
-import { Checks, Reports, User } from "../../types";
+import { Checks, Reports, User, Uservarification } from "../../types";
 import { datastore } from "../datastoreInterface";
 import { Database, open as sqliteOpen } from 'sqlite';
 import sqlite3 from 'sqlite3';
@@ -79,6 +79,19 @@ export class models implements datastore {
 
     creaeteTag(tag: string, url: string): Promise<void> {
         return Promise.resolve()
+    }
+
+    getUserVarification(userId: string) : Promise<Uservarification | undefined> {
+        return this.db.get<Uservarification>(`SELECT * FROM UserVarificatoin WHERE userId = ?`,userId); 
+    }
+    
+    async varifyUser(user : Uservarification) : Promise<void> {
+        await this.db.run(
+            'INSERT INTO UserVarificatoin (id,userId, varified) VALUES (?,?,?)',
+            user.id,
+            user.userId,
+            user.varified,
+          );
     }
 
 }

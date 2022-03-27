@@ -20,6 +20,15 @@ We'll need at least the following entities to implement the service:
 | E-mail | STRING |
 | UserName | STRING |   
 
+**UserVarificatoin**
+| Column | Type |
+|--------|------|
+| ID     | STRING /UUID |
+| userId | STRING/UUID | 
+| varified | BOOLEAN | 
+| varifiedAt | Timestamps | 
+
+
 **Checks** 
 | Column | Type | 
 |--------|------|
@@ -108,9 +117,9 @@ for v1 , a simple JWT-based auth mechanism is to be used , with passwords encryp
 
  **Auth** :
  ``` 
-/signIn      [POST] 
-/signUp      [POST]
-/signOut     [POST]
+/v1/signIn              [POST] 
+/v1/signUp              [POST]
+/v1/signUpVarification  [POST]
 ```
 
 **reports** 
