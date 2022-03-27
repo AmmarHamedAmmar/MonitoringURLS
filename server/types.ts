@@ -72,6 +72,9 @@ export interface URLsTags {
     urltag: string
 }
 
+
+/* Type checking */
+
 export type  typeValidation<req , res>  = RequestHandler<
 any,
 Partial<message<res>> , 

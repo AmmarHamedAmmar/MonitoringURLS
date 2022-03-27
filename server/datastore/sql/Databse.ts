@@ -43,6 +43,9 @@ export class models implements datastore {
     getCheckByURL(url: string): Promise<Checks[]| undefined > {
         return this.db.get(`SELECT * FROM Checks WHERE url = ?` , url ); 
     }
+    getURLsByTag(tag : string ) : Promise<Checks[]| undefined >  { 
+        return this.db.get(`SELECT * FROM URLsTags WHERE URLTage = ?` , tag ); 
+    }
     deletePath(url: string, path: string): Promise<void> {
         throw new Error("Method not implemented.");
     }

@@ -34,6 +34,7 @@ We'll need at least the following entities to implement the service:
 |--------|------|
 | ID     | STRING/ UUID | 
 | URL    | STRING |
+| CheckTime | NUMBER | 
 
 **Path** 
 |Column | Type | 
@@ -57,14 +58,6 @@ We'll need at least the following entities to implement the service:
 | UpTime  | NUMEBR | 
 | ResposeTime | NUMBER | 
 
-**CheckTime** 
-|Column | Type  |
-|-------|-------|
-| URLID | STRING/ UUID | 
-| CheckTime | NUMBER | 
-
-### note  : 
-    this table has one to one relationship with Checks table (Every URL should be checked every (5 min ) for example)
 
 **RequestsLogs** 
 
@@ -124,21 +117,18 @@ for v1 , a simple JWT-based auth mechanism is to be used , with passwords encryp
 
 **reports** 
 ```
-/reports/list           [GET]
-/reports/ :tag          [GET] 
-/reports/ :url          [GET]
+/v1/reports/list           [GET]
+/v1reports/ :tag           [GET] 
+/v1reports/ :url           [GET]
 ```
 **Tags** 
 ```
-tag/:url/:tag       [POST]
+/v1/tag/:url/               [POST]
 
 ```
 **checks** 
 ```
-/check/:url/:path   [PUT]
-/checks             [GET]
-/check/:url         [GET]
-/check/:url/:path   [DELETE]
-/check/:url         [DELETE]
+/v1/checks                  [GET]
+/v1/check/:url              [DELETE]
 ```
 

@@ -1,7 +1,7 @@
 
-import {getChecks , getCheckByURL} from './Handler/checkHandler'
+import {getChecks , getCheckByURL, deleteCheck, createTag} from './Handler/checkHandler'
 import express , {RequestHandler} from 'express' 
-import { getReports } from './Handler/reportHandler'
+import { getReports, getreportsByTag, getreportsByurl } from './Handler/reportHandler'
 import asyncHandler from "express-async-handler"
 import {db, initDB} from './datastore/datastoreInterface'
 import { errHandler } from './middleware/errorMiddleware';
@@ -36,9 +36,15 @@ import { authMiddleware } from './middleware/authMiddleware'
     app.use(authMiddleware)
 
     //protected endpoints 
+
     app.get('/v1/check'  , asyncHandler(getChecks) )
-    app.get('/v1/check/url'  , asyncHandler(getCheckByURL))
+    app.delete('/v1/check/url' , asyncHandler(deleteCheck))
+
     app.get('/v1/reports/list'  , asyncHandler(getReports) )
+    app.get('/v1/reports/tag' , asyncHandler(getreportsByTag))
+    app.get('/v1/reports/url' , asyncHandler(getreportsByurl))
+    
+    app.post('/v1/tag/url'  , asyncHandler(createTag) )
 
     app.use(errHandler)
 

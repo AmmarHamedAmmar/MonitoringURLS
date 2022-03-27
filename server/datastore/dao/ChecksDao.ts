@@ -16,6 +16,7 @@ export interface CheckDao {
     getCheckByURL(url : string) : Promise <Checks[] | undefined>
     deletePath(url :string , path : string ) : Promise <void | undefined > 
     deleteCheck(url : string ) : Promise <void | undefined > 
+    getURLsByTag(tag : string) : Promise <Checks[] | undefined>
 
 }
 
@@ -26,6 +27,6 @@ export interface CheckDao {
 
 export interface TagDao{
 
-    creaeteTag(URLTag :  URLsTags ) :  Promise<void | undefined >
+    creaeteTag(URLTag :  URLsTags  ) :  Promise<void | undefined >
 }
 
