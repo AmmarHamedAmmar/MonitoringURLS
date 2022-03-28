@@ -19,7 +19,6 @@ import {start} from './Handler/monitoringHandler'
     
     app.use(express.json())
 
-    start()
     app.use(requestLoggerMiddleWare)
 
     app.use((req , res , next)=>{

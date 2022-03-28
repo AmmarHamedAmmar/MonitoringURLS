@@ -51,7 +51,8 @@ We'll need at least the following entities to implement the service:
 | Column | Type | 
 |--------|------|
 |username | STRING | 
-|password | STRING | 
+|password | STRING |
+|urlId | STRING |  
 
 
 **Path** 

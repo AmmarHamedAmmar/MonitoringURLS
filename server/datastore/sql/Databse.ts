@@ -31,10 +31,29 @@ export class models implements datastore {
 
     async createCheck(check: Checks): Promise<void> {
         await this.db.run(
-            'INSERT INTO users (id, url , checkTime) VALUES (?,?, ?)',
+            'INSERT INTO users (id, url , interval , name , protocol , path , port , timeout , webhook , threshold , httpHeader , statusCode , ignoreSSL) VALUES (?,?, ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)',
             check.id , 
             check.url,
-            check.checkTime
+            check.interval , 
+            check.name , 
+            check.protocol , 
+            check.path , 
+            check.port ,
+            check.timeout ,  
+            check.webhook , 
+            check.threshold , 
+            check.httpHeader , 
+            check.statusCode , 
+            check.ignoreSSL , 
+          );
+    }
+    async createCheckAuth(id : string,username : string , password:string , url :string) : Promise<void> {
+        await this.db.run(
+            'INSERT INTO ChecksAuth (id, username, password , url) VALUES (?,?,? , ?)',
+            id,
+            username,
+            password , 
+            url
           );
     }
     getAllChecks(): Promise<Checks[] | undefined> {
@@ -90,7 +109,7 @@ export class models implements datastore {
         await this.db.run(
             'INSERT INTO URLsTags (id, urlid, urltag) VALUES (?,?,?)',
             URLTag.id , 
-            URLTag.urlid , 
+            URLTag.url , 
             URLTag.urltag
           );
     }

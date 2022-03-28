@@ -20,8 +20,20 @@ export interface Uservarification {
 export interface Checks {
     id : string 
     url : string 
-    checkTime : Number
-    
+    name : string
+    protocol: string
+    path : string| undefined
+    port  : Number| undefined
+    interval : Number | undefined
+    timeout : Number | undefined
+    webhook : string | undefined
+    threshold : string | undefined
+    httpHeader : String | undefined
+    statusCode : Number  | undefined
+    ignoreSSL : string
+    CheckUsername : string | undefined
+    CheckPassword : string  | undefined
+    tag : string  | undefined  
 }
 
 
@@ -45,12 +57,7 @@ export interface Reports {
 }
 
 
-export interface CheckTime {
 
-    urlid : string
-    checktime : Number
-    
-}
 
 
 export interface RequestsLogs {
@@ -69,7 +76,7 @@ export interface UserURLs {
 
 export interface URLsTags {
     id : string 
-    urlid : string
+    url : string
     urltag: string
 }
 

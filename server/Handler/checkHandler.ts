@@ -3,6 +3,8 @@ import { Checks, Path, typeValidation, URLsTags } from "../types";
 import {db} from '../datastore/datastoreInterface'
 import crypto from 'crypto'
 
+
+type tagType = Pick<URLsTags, 'urltag' | 'url'>
 export const getChecks : typeValidation<{},{checks : Checks []}> = async (req , res)=> {
 
     res.status(200).send({checks : await db.getAllChecks()})
@@ -19,25 +21,49 @@ export const getCheckByURL : typeValidation<urlType,{checks : Checks []}> = asyn
     
 }
 
-type checkRequest = Pick<Checks , 'url'|'checkTime'>
 
-export const createCheck : typeValidation<checkRequest , {}> = async (req , res)=> {
+export const createCheck : typeValidation<Checks , {}> = async (req , res)=> {
+    const data = req.body
+    if(!data.url || ! data.name || !data.ignoreSSL || !data.protocol ) 
+        return res.sendStatus(400)
 
-    if(!req.body.url || ! req.body.checkTime) return res.sendStatus(400)
-    
-    const url : string  = req.body.url ; 
-    const checkTime : Number = req.body.checkTime
+
+    if(data.CheckUsername && data.CheckPassword) {
+        await db.createCheckAuth(crypto.randomUUID() , data.CheckUsername , hashPassword(data.CheckPassword) ,data.url )
+
+    }
+    if(data.tag) {
+        const tag : tagType = {
+            'url' : data.url , 
+            'urltag' : data.tag
+        }
+        createTage(tag)
+    }
+
     const check : Checks = {
-        'url' : url , 
+        'url' : data.url , 
         'id' : crypto.randomUUID() , 
-        'checkTime' : checkTime
+        'interval' : data.interval ,
+        'CheckPassword' : data.CheckPassword , 
+        'CheckUsername' : data.CheckUsername , 
+        'protocol' : data.protocol , 
+        'timeout' : data.timeout , 
+        'ignoreSSL' : data.ignoreSSL , 
+        'path' : data.path , 
+        'name' : data.name , 
+        'statusCode' : data.statusCode , 
+        'webhook' : data.webhook , 
+        'httpHeader' : data.httpHeader , 
+        'port' : data.port , 
+        'threshold' :data.threshold, 
+        'tag' : data.tag
     }
     await db.createCheck(check)
     res.sendStatus(201).send({message : "created"})
 
 }
 
-
+type checkRequest  = Pick<Checks , 'url'>
 export const deleteCheck : typeValidation<checkRequest , {}> =async  (req , res)=> {
     
     if(!req.body.url) return res.sendStatus(400)
@@ -61,20 +87,36 @@ export const deleteCheckPath : typeValidation<requestType , {}> = async (req , r
 }
 
 
-type tagType = Pick<URLsTags, 'urltag' | 'urlid'>
+
 
 export const createTag : typeValidation<tagType , {}>  = async (req, res) => {
 
-    if(!req.body.urlid || !req.body.urltag) return res.sendStatus(400).send({message : "all field are required"})
-    const urlId : string  = req.body.urlid
+    if(!req.body.url || !req.body.urltag) return res.sendStatus(400).send({message : "all field are required"})
+    const url : string  = req.body.url;
     const tag : string = req.body.urltag
 
     const urlTagObj : URLsTags =  {
         urltag : tag ,
         id :  crypto.randomUUID() , 
-        urlid : urlId
+        url : url
 
     }
     await db.creaeteTag(urlTagObj)
     return res.status(201).send({message : "created"})
+}
+
+async function createTage(tag : tagType) {
+
+    const newTag :URLsTags = {
+        'id' :  crypto.randomUUID() , 
+        'url' : tag.url , 
+        'urltag' : tag.urltag
+    }
+    await db.creaeteTag(newTag)
+
+}
+
+function hashPassword(password: string): string {
+    if(password) console.log("pass : " , password )
+    return crypto.pbkdf2Sync(password, process.env.MY_SECRET_SALT!, 42, 64, 'sha512').toString('hex');
 }

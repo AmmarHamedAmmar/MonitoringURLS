@@ -17,6 +17,7 @@ export interface CheckDao {
     deletePath(url :string , path : string ) : Promise <void | undefined > 
     deleteCheck(url : string ) : Promise <void | undefined > 
     getURLsByTag(tag : string) : Promise <Checks[] | undefined>
+    createCheckAuth(id :string  , username : string , password : string , url :string ) : Promise <void | undefined > 
 
 }
 
