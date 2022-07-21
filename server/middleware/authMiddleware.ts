@@ -3,6 +3,7 @@ import { db } from '../datastore/datastoreInterface';
 import { typeValidation } from '../types';
 
 export const authMiddleware: typeValidation<any, any> = async (req, res, next) => {
+  // token in the header is like : 
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
     return res.sendStatus(401);

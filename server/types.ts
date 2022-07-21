@@ -24,7 +24,7 @@ export interface Checks {
     protocol: string
     path : string| undefined
     port  : Number| undefined
-    interval : Number | undefined
+    interval : number | undefined
     timeout : Number | undefined
     webhook : string | undefined
     threshold : string | undefined
