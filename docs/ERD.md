@@ -52,7 +52,9 @@ We'll need at least the following entities to implement the service:
 |--------|------|
 |username | STRING | 
 |password | STRING |
-|urlId | STRING |  
+|url | STRING |  
+### note : 
+    this table has one to one relationship with Checks table (Every URL may have one auth values)
 
 
 **Path** 
