@@ -56,10 +56,6 @@ export interface Reports {
 
 }
 
-
-
-
-
 export interface RequestsLogs {
     id : string  
     urlid : string 
